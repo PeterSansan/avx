@@ -140,17 +140,6 @@ BigNumber gmp2num(mpz_t g)
     Ipp32u* ipp = (Ipp32u*)malloc(sizeof(int) * 32);
     memcpy(ipp, (void*)g->_mp_d, sizeof(uint32_t) * 32);
 
-    int* iter0 = (int*)g->_mp_d;
-
-    //for (int i = 0; i < 32; i++)
-    //{
-    //    printf("%d\n", iter0[i]);
-    //}
-    //printf("XXXX\n");
-    //gmp_printf("%Zd\n", g);
-
-    //mpz_export(ipp, NULL, 1, sizeof(uint32_t), 0, 0, g);
-
     return BigNumber(ipp, 32);
 }
 
@@ -1053,6 +1042,14 @@ int main()
     gmp_randseed_ui(state, clock());
 
     //malloc
+    mpz_t _b, _e, _m;
+    mpz_init(_b);
+    mpz_init(_e);
+    mpz_init(_m);
+    num2gmp(_DD, _b);
+    num2gmp(_N1, _e);
+    num2gmp(_D1, _m);
+
     for (int  i = 0; i < testNum; i++)
     {
 
@@ -1062,27 +1059,28 @@ int main()
         mpz_init(fate_res_avx->bigint[i]);
         mpz_init(fate_res_gmp->bigint[i]);
 
-     /*   mpz_setbit(fate_b->bigint[i], 1023);
-        mpz_setbit(fate_e->bigint[i], 1023);
-        mpz_setbit(fate_m->bigint[i], 1023);
-        mpz_setbit(fate_res_avx->bigint[i], 1023);
+        //mpz_setbit(fate_b->bigint[i], 1023);
+        //mpz_setbit(fate_e->bigint[i], 1023);
+        //mpz_setbit(fate_m->bigint[i], 1023);
+        //mpz_setbit(fate_res_avx->bigint[i], 1023);
 
-        genrand_gmp(fate_b->bigint[i]);
+        mpz_set(fate_b->bigint[i], _b);
+        mpz_set(fate_b->bigint[i], _e);
+        mpz_set(fate_b->bigint[i], _m);
+
+        /*genrand_gmp(fate_b->bigint[i]);
         genrand_gmp(fate_e->bigint[i]);
         genrand_gmp(fate_m->bigint[i]);*/
 
-
-        mpz_rrandomb(fate_b->bigint[i], state, 1024);
-        mpz_rrandomb(fate_e->bigint[i], state, 1024);
-        mpz_rrandomb(fate_m->bigint[i], state, 1024);
-
+        //mpz_rrandomb(fate_b->bigint[i], state, 1024);
+        //mpz_rrandomb(fate_e->bigint[i], state, 1024);
+        //mpz_rrandomb(fate_m->bigint[i], state, 1024);
 
     }
     //gmp_printf("%Zd\n", fate_b->bigint[i]);
 
     //printf("[%d] %d \n", i, fate_b->bigint[i]->_mp_size);
-
-
+    
     fate_b->ismalloc = 1;
     fate_e->ismalloc = 1;
     fate_m->ismalloc = 1;
